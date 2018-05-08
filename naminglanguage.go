@@ -17,7 +17,7 @@ type Language struct {
 	WordOrder  []string
 }
 
-// GenerateName generates a random name
+// GeneratePersonName generates a random name for a person
 func GeneratePersonName() string {
 	language := GenerateLanguage()
 	firstName := randomWord(language)
@@ -28,7 +28,7 @@ func GeneratePersonName() string {
 	return name
 }
 
-// GenerateName generates a random name
+// GeneratePlaceName generates a random name for a place
 func GeneratePlaceName() string {
 	language := GenerateLanguage()
 	firstPart := randomWord(language)
