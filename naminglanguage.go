@@ -20,10 +20,10 @@ type Language struct {
 // GeneratePersonName generates a random name for a person
 func GeneratePersonName() string {
 	language := GenerateLanguage()
-	firstName := randomWord(language)
-	firstPartOfLastName := randomWord(language)
-	secondPartOfLastName := randomWord(language)
-	name := firstName.Word + " " + firstPartOfLastName.Word + secondPartOfLastName.Word
+	firstName := randomNoun(language)
+	firstPartOfLastName := randomNoun(language)
+	secondPartOfLastName := randomVerb(language)
+	name := firstName.Word + " " + firstPartOfLastName.Word + secondPartOfLastName.Word + " (" + firstName.Meaning + ", " + firstPartOfLastName.Meaning + " " + secondPartOfLastName.Meaning + ")"
 	name = strings.Title(name)
 	return name
 }
@@ -31,8 +31,8 @@ func GeneratePersonName() string {
 // GeneratePlaceName generates a random name for a place
 func GeneratePlaceName() string {
 	language := GenerateLanguage()
-	firstPart := randomWord(language)
-	secondPart := randomWord(language)
+	firstPart := randomAdjective(language)
+	secondPart := randomNoun(language)
 	name := firstPart.Word + secondPart.Word
 	name = strings.Title(name)
 	return name

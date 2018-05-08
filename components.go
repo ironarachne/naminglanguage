@@ -5,6 +5,15 @@ import (
 	"time"
 )
 
+func isUnique(word string, wordList []Word) bool {
+	for _, entry := range wordList {
+		if word == entry.Word {
+			return false
+		}
+	}
+	return true
+}
+
 func generateSyllable(consonants string, vowels string, sibilants string, glides string, finals string, order []string) string {
 	syllable := ""
 	component := ""
@@ -51,18 +60,43 @@ func generateSyllables() []string {
 	return syllables
 }
 
-func generateWords(syllables []string) []Word {
+func generateWordsForType(wordType string, wordList []string, maxSyllables int, syllables []string) []Word {
 	var words []Word
 	word := Word{}
 	wordString := ""
-	wordSyllableLength := randomWordSyllableLength()
-	for i := 0; i < 50; i++ {
+
+	for _, wordMeaning := range wordList {
 		wordString = ""
-		for j := 0; j < wordSyllableLength; j++ {
+		for j := 0; j < maxSyllables; j++ {
 			wordString += randomSyllable(syllables)
 		}
-		word = Word{wordString, "", ""}
+		word = Word{wordString, wordMeaning, wordType}
 		words = append(words, word)
+	}
+
+	return words
+}
+
+func generateWords(syllables []string) []Word {
+	var words []Word
+
+	words = append(words, generateWordsForType("article", articles, 1, syllables)...)
+	words = append(words, generateWordsForType("adjective", adjectives, 1, syllables)...)
+	words = append(words, generateWordsForType("adverb", adverbs, 1, syllables)...)
+	words = append(words, generateWordsForType("noun", nouns, randomWordSyllableLength(), syllables)...)
+	words = append(words, generateWordsForType("verb", verbs, randomWordSyllableLength(), syllables)...)
+	words = append(words, generateWordsForType("conjunction", conjunctions, 1, syllables)...)
+	words = append(words, generateWordsForType("pronoun", pronouns, 1, syllables)...)
+
+	return words
+}
+
+func getWordsByType(language Language, wordType string) []Word {
+	var words []Word
+	for _, word := range language.Dictionary {
+		if word.Part == wordType {
+			words = append(words, word)
+		}
 	}
 	return words
 }
@@ -110,6 +144,24 @@ func randomVowelSet() string {
 	rand.Seed(time.Now().UnixNano())
 	vowelSets := []string{"aeiou", "aiu"}
 	return vowelSets[rand.Intn(len(vowelSets))]
+}
+
+func randomAdjective(language Language) Word {
+	rand.Seed(time.Now().UnixNano())
+	words := getWordsByType(language, "adjective")
+	return words[rand.Intn(len(words))]
+}
+
+func randomNoun(language Language) Word {
+	rand.Seed(time.Now().UnixNano())
+	words := getWordsByType(language, "noun")
+	return words[rand.Intn(len(words))]
+}
+
+func randomVerb(language Language) Word {
+	rand.Seed(time.Now().UnixNano())
+	words := getWordsByType(language, "verb")
+	return words[rand.Intn(len(words))]
 }
 
 func randomWord(language Language) Word {
