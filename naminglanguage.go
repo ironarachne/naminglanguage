@@ -68,9 +68,18 @@ func generateSyllables() []string {
 	finals := randomFinalSet()
 	order := randomSyllableOrder()
 	var syllables []string
+	badCombinations := []string{"sd", "bx", "cx", "zd"}
+	doubleLetter := "aa"
+	for _, letter := range "abcdefghijklmnopqrstuvwyxz" {
+		doubleLetter = string(letter + letter)
+		badCombinations = append(badCombinations, doubleLetter)
+	}
 
 	for i := 0; i < 10; i++ {
 		syllable = generateSyllable(consonants, vowels, sibilants, glides, finals, order)
+		for stringInSlice(syllable, badCombinations) {
+			syllable = generateSyllable(consonants, vowels, sibilants, glides, finals, order)
+		}
 		syllables = append(syllables, syllable)
 	}
 
@@ -104,7 +113,7 @@ func optionalCharacter(character string) string {
 
 func randomConsonantSet() string {
 	rand.Seed(time.Now().UnixNano())
-	consonantSets := [4]string{"ptkmnsl", "ptkbdgmnlrsz", "ptkqvsgrmn", "tkdgmns"}
+	consonantSets := []string{"ptkmnsl", "ptkbdgmnlrsz", "ptkqvsgrmn", "tkdgmns", "tksdbqxmnlrwj"}
 	return consonantSets[rand.Intn(len(consonantSets))]
 }
 
@@ -116,25 +125,25 @@ func randomCharacterFromString(items string) string {
 
 func randomFinalSet() string {
 	rand.Seed(time.Now().UnixNano())
-	finalSets := [3]string{"mn", "sk", "sz"}
+	finalSets := []string{"mn", "sk", "sz"}
 	return finalSets[rand.Intn(len(finalSets))]
 }
 
 func randomGlideSet() string {
 	rand.Seed(time.Now().UnixNano())
-	glideSets := [5]string{"l", "r", "lr", "lrw", "lrwj"}
+	glideSets := []string{"l", "r", "lr", "lrw", "lrwj"}
 	return glideSets[rand.Intn(len(glideSets))]
 }
 
 func randomSibilantSet() string {
 	rand.Seed(time.Now().UnixNano())
-	sibilantSets := [2]string{"s", "sf"}
+	sibilantSets := []string{"s", "sf"}
 	return sibilantSets[rand.Intn(len(sibilantSets))]
 }
 
 func randomVowelSet() string {
 	rand.Seed(time.Now().UnixNano())
-	vowelSets := [2]string{"aeiou", "aiu"}
+	vowelSets := []string{"aeiou", "aiu"}
 	return vowelSets[rand.Intn(len(vowelSets))]
 }
 
@@ -150,17 +159,26 @@ func randomSyllable(syllables []string) string {
 
 func randomSyllableOrder() []string {
 	rand.Seed(time.Now().UnixNano())
-	syllableOrders := [3][]string{{"C", "V", "C"}, {"S?", "C", "V", "C"}, {"S?", "C", "V", "F"}}
+	syllableOrders := [][]string{{"C", "V", "C"}, {"S?", "C", "V", "C"}, {"S?", "C", "V", "F"}}
 	return syllableOrders[rand.Intn(len(syllableOrders))]
 }
 
 func randomWordOrder() []string {
 	rand.Seed(time.Now().UnixNano())
-	wordOrders := [1][]string{{"S", "V", "O"}}
+	wordOrders := [][]string{{"S", "V", "O"}}
 	return wordOrders[rand.Intn(len(wordOrders))]
 }
 
 func randomWordSyllableLength() int {
 	rand.Seed(time.Now().UnixNano())
-	return rand.Intn(3) + 1
+	return rand.Intn(2) + 1
+}
+
+func stringInSlice(a string, list []string) bool {
+	for _, b := range list {
+		if b == a {
+			return true
+		}
+	}
+	return false
 }
