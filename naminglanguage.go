@@ -40,13 +40,19 @@ func GenerateLanguage() Language {
 	return language
 }
 
-func generateSyllable(consonants string, vowels string, order []string) string {
+func generateSyllable(consonants string, vowels string, sibilants string, glides string, finals string, order []string) string {
 	syllable := ""
 	component := ""
 	for _, orderItem := range order {
 		component = randomCharacterFromString(consonants)
 		if orderItem == "V" {
 			component = randomCharacterFromString(vowels)
+		} else if orderItem == "S?" {
+			component = optionalCharacter(randomCharacterFromString(sibilants))
+		} else if orderItem == "G" {
+			component = randomCharacterFromString(glides)
+		} else if orderItem == "F" {
+			component = randomCharacterFromString(finals)
 		}
 		syllable += component
 	}
@@ -57,11 +63,14 @@ func generateSyllables() []string {
 	syllable := ""
 	consonants := randomConsonantSet()
 	vowels := randomVowelSet()
+	sibilants := randomSibilantSet()
+	glides := randomGlideSet()
+	finals := randomFinalSet()
 	order := randomSyllableOrder()
 	var syllables []string
 
 	for i := 0; i < 10; i++ {
-		syllable = generateSyllable(consonants, vowels, order)
+		syllable = generateSyllable(consonants, vowels, sibilants, glides, finals, order)
 		syllables = append(syllables, syllable)
 	}
 
@@ -84,9 +93,18 @@ func generateWords(syllables []string) []Word {
 	return words
 }
 
+func optionalCharacter(character string) string {
+	rand.Seed(time.Now().UnixNano())
+	i := rand.Intn(10)
+	if i >= 6 {
+		return character
+	}
+	return ""
+}
+
 func randomConsonantSet() string {
 	rand.Seed(time.Now().UnixNano())
-	consonantSets := [1]string{"ptkmnsl"}
+	consonantSets := [4]string{"ptkmnsl", "ptkbdgmnlrsz", "ptkqvsgrmn", "tkdgmns"}
 	return consonantSets[rand.Intn(len(consonantSets))]
 }
 
@@ -96,9 +114,27 @@ func randomCharacterFromString(items string) string {
 	return string(characters[rand.Intn(len(characters))])
 }
 
+func randomFinalSet() string {
+	rand.Seed(time.Now().UnixNano())
+	finalSets := [3]string{"mn", "sk", "sz"}
+	return finalSets[rand.Intn(len(finalSets))]
+}
+
+func randomGlideSet() string {
+	rand.Seed(time.Now().UnixNano())
+	glideSets := [5]string{"l", "r", "lr", "lrw", "lrwj"}
+	return glideSets[rand.Intn(len(glideSets))]
+}
+
+func randomSibilantSet() string {
+	rand.Seed(time.Now().UnixNano())
+	sibilantSets := [2]string{"s", "sf"}
+	return sibilantSets[rand.Intn(len(sibilantSets))]
+}
+
 func randomVowelSet() string {
 	rand.Seed(time.Now().UnixNano())
-	vowelSets := [1]string{"aeiou"}
+	vowelSets := [2]string{"aeiou", "aiu"}
 	return vowelSets[rand.Intn(len(vowelSets))]
 }
 
@@ -114,7 +150,7 @@ func randomSyllable(syllables []string) string {
 
 func randomSyllableOrder() []string {
 	rand.Seed(time.Now().UnixNano())
-	syllableOrders := [1][]string{{"C", "V", "C"}}
+	syllableOrders := [3][]string{{"C", "V", "C"}, {"S?", "C", "V", "C"}, {"S?", "C", "V", "F"}}
 	return syllableOrders[rand.Intn(len(syllableOrders))]
 }
 
