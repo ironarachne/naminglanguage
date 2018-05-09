@@ -49,7 +49,7 @@ func generateSyllables() []string {
 		badCombinations = append(badCombinations, doubleLetter)
 	}
 
-	for i := 0; i < 10; i++ {
+	for i := 0; i < 150; i++ {
 		syllable = generateSyllable(consonants, vowels, sibilants, glides, finals, order)
 		for stringInSlice(syllable, badCombinations) {
 			syllable = generateSyllable(consonants, vowels, sibilants, glides, finals, order)
@@ -60,15 +60,22 @@ func generateSyllables() []string {
 	return syllables
 }
 
-func generateWordsForType(wordType string, wordList []string, maxSyllables int, syllables []string) []Word {
+func generateWordsForType(wordType string, wordList []string, existingWords []Word, maxSyllables int, syllables []string) []Word {
 	var words []Word
 	word := Word{}
 	wordString := ""
+	unique := false
 
 	for _, wordMeaning := range wordList {
-		wordString = ""
-		for j := 0; j < maxSyllables; j++ {
-			wordString += randomSyllable(syllables)
+		unique = false
+		for !unique {
+			wordString = ""
+			for j := 0; j < maxSyllables; j++ {
+				wordString += randomSyllable(syllables)
+			}
+			if isUnique(wordString, existingWords) {
+				unique = true
+			}
 		}
 		word = Word{wordString, wordMeaning, wordType}
 		words = append(words, word)
@@ -80,13 +87,13 @@ func generateWordsForType(wordType string, wordList []string, maxSyllables int, 
 func generateWords(syllables []string) []Word {
 	var words []Word
 
-	words = append(words, generateWordsForType("article", articles, 1, syllables)...)
-	words = append(words, generateWordsForType("adjective", adjectives, 1, syllables)...)
-	words = append(words, generateWordsForType("adverb", adverbs, 1, syllables)...)
-	words = append(words, generateWordsForType("noun", nouns, randomWordSyllableLength(), syllables)...)
-	words = append(words, generateWordsForType("verb", verbs, randomWordSyllableLength(), syllables)...)
-	words = append(words, generateWordsForType("conjunction", conjunctions, 1, syllables)...)
-	words = append(words, generateWordsForType("pronoun", pronouns, 1, syllables)...)
+	words = append(words, generateWordsForType("article", articles, words, 1, syllables)...)
+	words = append(words, generateWordsForType("adjective", adjectives, words, 1, syllables)...)
+	words = append(words, generateWordsForType("adverb", adverbs, words, 1, syllables)...)
+	words = append(words, generateWordsForType("noun", nouns, words, randomWordSyllableLength(), syllables)...)
+	words = append(words, generateWordsForType("verb", verbs, words, randomWordSyllableLength(), syllables)...)
+	words = append(words, generateWordsForType("conjunction", conjunctions, words, 1, syllables)...)
+	words = append(words, generateWordsForType("pronoun", pronouns, words, 1, syllables)...)
 
 	return words
 }
