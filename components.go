@@ -88,10 +88,10 @@ func generateWords(syllables []string) []Word {
 	var words []Word
 
 	words = append(words, generateWordsForType("article", articles, words, 1, syllables)...)
-	words = append(words, generateWordsForType("adjective", adjectives, words, 1, syllables)...)
-	words = append(words, generateWordsForType("adverb", adverbs, words, 1, syllables)...)
-	words = append(words, generateWordsForType("noun", nouns, words, randomWordSyllableLength(), syllables)...)
-	words = append(words, generateWordsForType("verb", verbs, words, randomWordSyllableLength(), syllables)...)
+	words = append(words, generateWordsForType("adjective", adjectives, words, randomWordSyllableLength(2), syllables)...)
+	words = append(words, generateWordsForType("adverb", adverbs, words, randomWordSyllableLength(2), syllables)...)
+	words = append(words, generateWordsForType("noun", nouns, words, randomWordSyllableLength(3), syllables)...)
+	words = append(words, generateWordsForType("verb", verbs, words, randomWordSyllableLength(3), syllables)...)
 	words = append(words, generateWordsForType("conjunction", conjunctions, words, 1, syllables)...)
 	words = append(words, generateWordsForType("pronoun", pronouns, words, 1, syllables)...)
 
@@ -183,7 +183,7 @@ func randomSyllable(syllables []string) string {
 
 func randomSyllableOrder() []string {
 	rand.Seed(time.Now().UnixNano())
-	syllableOrders := [][]string{{"C", "V", "C"}, {"S?", "C", "V", "C"}, {"S?", "C", "V", "F"}}
+	syllableOrders := [][]string{{"C", "V", "C"}, {"S?", "C", "V", "C"}, {"S?", "C", "V", "F"}, {"C", "V"}}
 	return syllableOrders[rand.Intn(len(syllableOrders))]
 }
 
@@ -193,7 +193,7 @@ func randomWordOrder() []string {
 	return wordOrders[rand.Intn(len(wordOrders))]
 }
 
-func randomWordSyllableLength() int {
+func randomWordSyllableLength(max int) int {
 	rand.Seed(time.Now().UnixNano())
-	return rand.Intn(2) + 1
+	return rand.Intn(max) + 1
 }
