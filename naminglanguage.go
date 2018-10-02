@@ -21,9 +21,9 @@ type Language struct {
 func GeneratePersonName() string {
 	language := GenerateLanguage()
 	firstName := randomNoun(language)
-	firstPartOfLastName := randomNoun(language)
-	secondPartOfLastName := randomVerb(language)
-	name := firstName.Word + " " + firstPartOfLastName.Word + secondPartOfLastName.Word + " (" + firstName.Meaning + ", " + firstPartOfLastName.Meaning + " " + secondPartOfLastName.Meaning + ")"
+	firstPartOfLastName := randomVerb(language)
+	secondPartOfLastName := randomNoun(language)
+	name := firstName.Word + " " + firstPartOfLastName.Word + secondPartOfLastName.Word + " (" + firstName.Meaning + ", " + nounFromVerb(firstPartOfLastName.Meaning) + " of " + pluralizeNoun(secondPartOfLastName.Meaning) + ")"
 	name = strings.Title(name)
 	return name
 }

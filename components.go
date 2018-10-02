@@ -14,6 +14,22 @@ func isUnique(word string, wordList []Word) bool {
 	return true
 }
 
+func nounFromVerb(word string) string {
+	lastCharacter := string(word[len(word)-1:])
+	if (lastCharacter == "e") {
+		return word + "r"
+	}
+	return word + "er"
+}
+
+func pluralizeNoun(word string) string {
+	lastCharacter := string(word[len(word)-1:])
+	if (lastCharacter == "s") {
+		return word + "ses"
+	}
+	return word + "s"
+}
+
 func generateSyllable(consonants string, vowels string, sibilants string, glides string, finals string, order []string) string {
 	syllable := ""
 	component := ""
