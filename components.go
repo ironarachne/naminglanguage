@@ -2,7 +2,6 @@ package naminglanguage
 
 import (
 	"math/rand"
-	"time"
 )
 
 func isUnique(word string, wordList []Word) bool {
@@ -16,7 +15,7 @@ func isUnique(word string, wordList []Word) bool {
 
 func nounFromVerb(word string) string {
 	lastCharacter := string(word[len(word)-1:])
-	if (lastCharacter == "e") {
+	if lastCharacter == "e" {
 		return word + "r"
 	}
 	return word + "er"
@@ -24,7 +23,7 @@ func nounFromVerb(word string) string {
 
 func pluralizeNoun(word string) string {
 	lastCharacter := string(word[len(word)-1:])
-	if (lastCharacter == "s") {
+	if lastCharacter == "s" {
 		return word + "ses"
 	}
 	return word + "s"
@@ -125,7 +124,6 @@ func getWordsByType(language Language, wordType string) []Word {
 }
 
 func optionalCharacter(character string) string {
-	rand.Seed(time.Now().UnixNano())
 	i := rand.Intn(10)
 	if i >= 6 {
 		return character
@@ -134,82 +132,68 @@ func optionalCharacter(character string) string {
 }
 
 func randomConsonantSet() string {
-	rand.Seed(time.Now().UnixNano())
 	consonantSets := []string{"ptkmnsl", "ptkbdgmnlrsz", "ptkqvsgrmn", "tkdgmns", "tksdbqxmnlrwj"}
 	return consonantSets[rand.Intn(len(consonantSets))]
 }
 
 func randomCharacterFromString(items string) string {
-	rand.Seed(time.Now().UnixNano())
 	characters := []byte(items)
 	return string(characters[rand.Intn(len(characters))])
 }
 
 func randomFinalSet() string {
-	rand.Seed(time.Now().UnixNano())
 	finalSets := []string{"mn", "sk", "sz"}
 	return finalSets[rand.Intn(len(finalSets))]
 }
 
 func randomGlideSet() string {
-	rand.Seed(time.Now().UnixNano())
 	glideSets := []string{"l", "r", "lr", "lrw", "lrwj"}
 	return glideSets[rand.Intn(len(glideSets))]
 }
 
 func randomSibilantSet() string {
-	rand.Seed(time.Now().UnixNano())
 	sibilantSets := []string{"s", "sf"}
 	return sibilantSets[rand.Intn(len(sibilantSets))]
 }
 
 func randomVowelSet() string {
-	rand.Seed(time.Now().UnixNano())
 	vowelSets := []string{"aeiou", "aiu"}
 	return vowelSets[rand.Intn(len(vowelSets))]
 }
 
 func randomAdjective(language Language) Word {
-	rand.Seed(time.Now().UnixNano())
 	words := getWordsByType(language, "adjective")
 	return words[rand.Intn(len(words))]
 }
 
 func randomNoun(language Language) Word {
-	rand.Seed(time.Now().UnixNano())
 	words := getWordsByType(language, "noun")
 	return words[rand.Intn(len(words))]
 }
 
 func randomVerb(language Language) Word {
-	rand.Seed(time.Now().UnixNano())
 	words := getWordsByType(language, "verb")
 	return words[rand.Intn(len(words))]
 }
 
 func randomWord(language Language) Word {
-	rand.Seed(time.Now().UnixNano())
 	return language.Dictionary[rand.Intn(len(language.Dictionary))]
 }
 
 func randomSyllable(syllables []string) string {
-	rand.Seed(time.Now().UnixNano())
 	return syllables[rand.Intn(len(syllables))]
 }
 
 func randomSyllableOrder() []string {
-	rand.Seed(time.Now().UnixNano())
 	syllableOrders := [][]string{{"C", "V", "C"}, {"S?", "C", "V", "C"}, {"S?", "C", "V", "F"}, {"C", "V"}}
 	return syllableOrders[rand.Intn(len(syllableOrders))]
 }
 
 func randomWordOrder() []string {
-	rand.Seed(time.Now().UnixNano())
 	wordOrders := [][]string{{"S", "V", "O"}}
 	return wordOrders[rand.Intn(len(wordOrders))]
 }
 
 func randomWordSyllableLength(max int) int {
-	rand.Seed(time.Now().UnixNano())
 	return rand.Intn(max) + 1
 }
