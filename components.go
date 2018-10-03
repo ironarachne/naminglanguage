@@ -78,18 +78,17 @@ func generateSyllables() []string {
 
 func generateWordsForType(wordType string, wordList []string, existingWords []Word, maxSyllables int, syllables []string) []Word {
 	var words []Word
-	word := Word{}
 	wordString := ""
-	unique := false
+	word := Word{}
 
 	for _, wordMeaning := range wordList {
-		unique = false
+		unique := false
 		for !unique {
 			wordString = ""
 			for j := 0; j < maxSyllables; j++ {
 				wordString += randomSyllable(syllables)
 			}
-			if isUnique(wordString, existingWords) {
+			if maxSyllables == 1 || isUnique(wordString, existingWords) {
 				unique = true
 			}
 		}
