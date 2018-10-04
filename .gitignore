@@ -1,1 +1,6 @@
 /build
+*.exe
+
+# GoLand
+.idea/
+
