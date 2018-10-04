@@ -13,6 +13,10 @@ func main() {
 	numberOfNames := flag.Int("n", 1, "Number of names to generate")
 	typeOfName := flag.String("type", "person", "Type of name to generate (person or place)")
 	randomSeed := flag.Int64("s", 0, "Optional random generator seed")
+	firstNameOnly := flag.Bool("f",false,"Generate first name")
+	lastNameOnly := flag.Bool("l",false,"Generate last name")
+	meaning := flag.Bool("m",false,"Generate name meaning for first and/or last name")
+
 	flag.Parse()
 
 	name := ""
@@ -25,7 +29,7 @@ func main() {
 
 	for i := 0; i < *numberOfNames; i++ {
 		if *typeOfName == "person" {
-			name = naminglanguage.GeneratePersonName()
+			name = naminglanguage.GeneratePersonName(*firstNameOnly,*lastNameOnly,*meaning)
 		} else {
 			name = naminglanguage.GeneratePlaceName()
 		}
