@@ -1,6 +1,7 @@
 package naminglanguage
 
 import (
+	"fmt"
 	"strings"
 )
 
@@ -17,48 +18,64 @@ type Language struct {
 	WordOrder  []string
 }
 
-// GeneratePersonName generates a random name for a person
-func GeneratePersonName(first bool, last bool, meaning bool) string {
+// Person is a representation of a person.
+type Person struct {
+	FirstName        string `json:",omitempty"`
+	LastName         string `json:",omitempty"`
+	FirstNameMeaning string `json:",omitempty"`
+	LastNameMeaning  string `json:",omitempty"`
+}
+
+// String returns the string version of Person
+func (p *Person) String() string {
+	var fields []string
+
+	if p.FirstName != "" {
+		fields = append(fields, p.FirstName)
+	}
+
+	if p.LastName != "" {
+		fields = append(fields, p.LastName)
+	}
+
+	if p.FirstNameMeaning != "" {
+		fields = append(fields, fmt.Sprintf("(%s, %s)", p.FirstNameMeaning, p.LastNameMeaning))
+	}
+
+	return strings.Join(fields, " ")
+}
+
+// Place is representation of a place.
+type Place struct {
+	Name string
+	// FIXME: unsure how to implement this, it was in the original issue for json though.
+	// Meaning string
+}
+
+// GeneratePerson generates a random name for a person.
+func GeneratePerson() *Person {
 	language := GenerateLanguage()
 	firstName := randomNoun(language)
 	firstPartOfLastName := randomVerb(language)
 	secondPartOfLastName := randomNoun(language)
-	name := ""
-	// First Name Only
-	if (first) {
-		name += firstName.Word + " "
-	}
-	// Last Name Only
-	if (last) {
-		name += firstPartOfLastName.Word + secondPartOfLastName.Word + " "
-	}
-	// First and Land name with no meaning
-	if (meaning) {
-		if(first && last){
-		name +=	"(" + firstName.Meaning + ", " + nounFromVerb(firstPartOfLastName.Meaning) + " of " + pluralizeNoun(secondPartOfLastName.Meaning) + ")"
-		} else if (first) {
-			name += "(" + firstName.Meaning + ")"
-		} else if (last){
-			name +=	"(" + nounFromVerb(firstPartOfLastName.Meaning) + " of " + pluralizeNoun(secondPartOfLastName.Meaning) + ")"
-		}
-	}
-	// Defualt of Full name + Meaning
-	if (!first && !last) {
-		name += firstName.Word + " " + firstPartOfLastName.Word + secondPartOfLastName.Word + " (" + firstName.Meaning + ", " + nounFromVerb(firstPartOfLastName.Meaning) + " of " + pluralizeNoun(secondPartOfLastName.Meaning) + ")"
-	}
 
-	name = strings.Title(name)
-	return name
+	return &Person{
+		FirstName:        strings.Title(firstName.Word),
+		LastName:         strings.Title(firstPartOfLastName.Word + secondPartOfLastName.Word),
+		FirstNameMeaning: strings.Title(firstName.Meaning),
+		LastNameMeaning:  strings.Title(nounFromVerb(firstPartOfLastName.Meaning) + " of " + pluralizeNoun(secondPartOfLastName.Meaning)),
+	}
 }
 
-// GeneratePlaceName generates a random name for a place
-func GeneratePlaceName() string {
+// GeneratePlace generates a random name for a place.
+func GeneratePlace() *Place {
 	language := GenerateLanguage()
 	firstPart := randomAdjective(language)
 	secondPart := randomNoun(language)
-	name := firstPart.Word + secondPart.Word
-	name = strings.Title(name)
-	return name
+
+	return &Place{
+		Name: firstPart.Word + secondPart.Word,
+	}
 }
 
 // GenerateLanguage generates a language
@@ -70,3 +87,7 @@ func GenerateLanguage() Language {
 
 	return language
 }
+
+// TODO:
+// 	GeneratePersonFromLanguage(lang *Language) *Person
+//	GeneratePlaceFromLanguage(lang *Language) *Place
