@@ -9,22 +9,23 @@ import (
 	"time"
 
 	"github.com/ironarachne/naminglanguage"
+	"github.com/ironarachne/random"
 )
 
 func main() {
 	numberOfNames := flag.Int("n", 1, "Number of names to generate")
 	typeOfName := flag.String("type", "person", "Type of name to generate (person or place)")
-	randomSeed := flag.Int64("s", 0, "Optional random generator seed")
+	randomSeed := flag.String("s", "now", "Optional random generator seed")
 	firstNameOnly := flag.Bool("f", false, "Generate first name")
 	lastNameOnly := flag.Bool("l", false, "Generate last name")
 	meaning := flag.Bool("m", false, "Generate name meaning for first and/or last name")
 	asJSON := flag.Bool("json", false, "return values as json")
 	flag.Parse()
 
-	if *randomSeed == 0 {
+	if *randomSeed == "now" {
 		rand.Seed(time.Now().UnixNano())
 	} else {
-		rand.Seed(*randomSeed)
+		random.SeedFromString(*randomSeed)
 	}
 
 	var err error
